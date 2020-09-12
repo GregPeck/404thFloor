@@ -19,97 +19,23 @@ function random(s) {
 }
 
 var ctx, img, mountain = new Image();
-var gameStarted = 0;
+var gameStarted = false;
 var clouds = [], player;
 
 var blink = [];
 var images = [];
+var score = 0;
+keys = [];
+deltaY = 0;
+allowKeys = false;
 
-go = 1;
+go = true;
 var explode = 0,gems = [],extraX,extraY,ds,frame=0;
-
 var cloud = new Image();
 cloud.src = "c.png";
 var mountain = document.createElement("canvas");
 mountain.width = 1008;
 mountain.height = 480;
-
-//
-// Init pseudo random for mountain and decorations
-//
-mr = new random(200);
-
-//
-// Generate a mountain
-//
-generateMountain = function(s) {
-	v = 480;
-	t = [(mr.n() * v)|0, (mr.n() * v)|0];
-	while(t.length < mountain.width) {
-		v *= 0.52;
-		t = function(o, v) {
-			n = [o[0]];
-			for(i = 1; i < o.length; i++) {
-				n.push(((o[i - 1] + o[i]) / 2 + ((Math.random() - 0.5) * v))|0);
-				n.push(o[i]);
-			}
-			return n;
-		}(t, v);
-	}
-	ctx = mountain.getContext("2d");
-	var grd=ctx.createLinearGradient(0,mountain.height,0,0);
-	grd.addColorStop(0,"#000");
-	grd.addColorStop(0.95,"rgb(200,"+(mr.n()*255)+",200)");
-	ctx.strokeStyle = grd;
-
-	for(i = 0; i < mountain.width; i++) {
-		ctx.beginPath();
-		ctx.moveTo(i + 0.5, mountain.height - t[i]);
-		ctx.lineTo(i + 0.5, mountain.height);
-		ctx.stroke();
-	}
-}
-generateMountain();
-generateMountain();
-generateMountain();
-mr.n();
-
-
-//
-// Init game, canvas, player
-//
-load = function(s) {
-	c.width = 1008;
-	c.height = 480;
-	ctx = c.getContext("2d");
-	ctx.fillStyle = "#D0F4F7"; //Sky color
-
-	player = new PLAYER(40,200);
-	
-	img = new Image();
-	img.src = 't.png';
-	img.onload = function() {
-		for (var i=0; i<10; i++) {
-			clouds.push({x:Math.random()*1224, y:Math.random()*250, size:0.5+Math.random()/2, speed:Math.max(0.25, Math.random())});
-		}
-	}
-	onresize();
-	gameLoop();
-}
-
-
-
-//
-// Init level
-//
-var level="                                               B B BBB B B          A A A A A A          ABA A A ABA            A A A   A     BBBC   A AAA   A TBBBAAADC   MM   I  TUAAAAAAADBBBBBBBBBBBUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC         TAAAAAAAAAADC       TUAAAAAAAAAAADC     TUAAAAAAAAAAAAADC   TUAAAAAAAAAAAAAAADB BUAAAAAAAAA                   AA                   AA         O         AA         O         AA         O         AA         O         AA                   AA         J         AA  BBBBBBBBBBBBBBBBBAA                   AA                   AA B                 AAJA                 AAAA                 AAAA                 AA               A   AA               A  XAA      WWXWW    AAAAAA      BBBBB    AAAAAA             TBAAAAAA            TUAAAAAAA           TUAAAAAAAA          TUAAAAAAAAA         TUAAAAAAAAAA        TUAAAAAAAAAAABBBBBC             AAAAAAADC            AAAAAAAADC           AAAAAAAAADC          AAAAAAAAAADC         AAAAAAAAAAADC        AAAAAAAAAAAADC       AAAAAAAAAAAAADC      AAAAAAAAAAAAAADC     AAAAAAAAAAAAAAADB    AA              A    AA BB           A    AA A B               AA A A             JJAA A A          BBBBBAA AB                AA                   AA BBB               AA A A               AA AB  A N    N      AA A A AW           BAA A A A      N   N AAA     A           XAAA BBB A N    N     AAA A A AW           AAA ABA A      N   N AAA A A A           XAAA A A A N    N      AA     AW            AA A A A      N   N  AA A A A           XAAA ABA A N    N     AAA A A AW           AAA A A A          N AAA                 XAAA                   AA      W            AA      B            AA   BBBBBBBBBBBBBBBBAA                   AA                   AAJO                 AABO                 AA O                 AA O                 AA O                 AANJ                 AANB                 AAN                  AAN                  AAN                  AAJM                 AABM                 AA M                 AA M                 AALM                 AALJ                 AALB       TB        AAL       TUAMLMOLMNLAAL      TUAAONLNMNLOAAL     TUAAALONLOLMNAAJ    TUAAAANLMOLMLOAAB   TUAAAAAJJJJJJJJAA   TUAAAAAABBBBBBBBAA  TUAAAAAAA        AA BUAAAAAAAA        AA AAAAAAAAAA        AA                   AA                   AA                LMNAAJ               OMLAABBB             BBBAAAAA             AAAAA      L      L     AA      B      B     AA                   AA                   AA         LO        AA        WLOX       AA        ALOA       AA         LO        AA         LO        AA         LO        AA         LO        AA         LO        AA         JJ        AA         BB        AA       B    B      AA                   AA                   AA   B           B   AA                   AA                   AAB                 BAA                   AA                   AA   B           B   AA                   AA                   AABBBBBBB     BBBBBBBAA                   AA                   AA      BBBBBBB      AA                   AA                   AA                   AA                   AAW                 XAABBBBBBB     BBBBBBBAA      AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA  A A AW   XA      AA  A A AW   XA      AA  AA  AW   XA      AA  A A AW   XA      AA  A A AW   XA      AA      AW   XA      AA  AAA AW   XA      AA    A AW   XA      AA    A AW   XA      AA   AA AW   XA      AA    A AW   XA      AA  AAA AW   XA      AA      AW   XA      AA   A  AW   XA      AA  AA  AW   XA      AA   A  AW   XA      AA   A  AW   XA      AA  AAA AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA  AAA AW   XA      AA  A   AW   XA      AA  AAA AW   XA      AA    A AW   XA      AA  AAA AW   XA      AA      AW   XA      AA  AAA AW   XA      AA    A AW   XA      AA    A AW   XA      AA  A A AW   XA      AA   AA AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA      A     A      AA      M            AA      M  J         AA   OO AAAAAAA      AA OO  O             AAO     OO           AAO       O   OO     AAO       O     O    AAW        OO    O   AA          O    O   AA          X     O  AA          A      O AA                   AA                  XAA                   AA  N B O B L B M B  AA  N A O A L A M A  AA  N A O A L A M A  AA  N A O A L A M A  AA  N A   A   A   A  AA  J A J A J A J    AAO BBBBBBBBBBBBBBBBBAAO                  AAO                  AAO                  AA                   AAJO                 AAAN                 AA M                 AA O              L  AA N          XNN  L AA M          BBB  L AA J          AAA   LAABBB               LAAAAA               LAA  A                AA  A               JAA  ABBBBBB       O BAA                BBAAA                AAAAA            O      AA            B      AA            A      AA        O          AA        B          AA        A          AA    O              AA    B              AA    A              AA              BBBBBAAB     LLL     AAAAAAA      LLL          AA                   AABBBBBBBBBBBBBBB    AAAAAAAAAAAAAAAAA    AA             NLM   AA            O   O  AA           O       AA          O        AA      T          JBAA     TU          AAAA    TUA           AAA   TUAAW J  B    XAAA BBUAAABBBBBABBBBAAAA A  NN   NN        AA A N  N N  N       AA        N  N       AA                   AA       B    B      AAJ      A    A      AABBBBBBBA    ABB    AA                  XAA     LL     LL     AA     LL            AA            TBBBBB AA           TU      AAOBBBBBBBBBBU  OO   AAO                  AAO       OO         AAO                  AAO                  AA                   AAJ    N             AAB         O      JMAA     J           BMAA     B    J       MAA                  MAA                  MAA                   AA                  JAA                  BAA                   AALNNN     O        BAALBBB           O   AAL        J         AAL        B     J   AAL              B   AAL                  AAJMNMNMNMNMNMNMNMN  AABBBBBBBBBBBBBBBBBB AA                  OAA                  OAA                  OAA                  OAA                   AA                  JAANLMNOL          OTBAANBBBBB          BUAAAN        J         AAN        B         AAN                  AAN                  AAJ                  AABBBBB         M    AA      N       B  N AA     LB    O     B AA     L     B       AA     L        L    AA     L        B    AA     BCOOOOOOOOOOOOAA     ADBBBBBBBBBBBBAA       AAAAAAAAAAAAAAW      AAAAAAAAAAAAAA       A           AA       A           AA       A           AA       A           AA     X A           AA     AAA           AA       A           AA       A           AA       A           AAW      A OL        AA       A NM        AA       A OL        AA       A NM        AA       A OL        AA       A NM        AA     X AJOL        AA     AAAB   MMM    AA            BBB    AA                 OOAA                 BBAAW             MLM  AABBBBBC        ONO  AAAAAAADC     BBBBBBBAAAAAAAADC    AAAAAAAAAAAAAAAADC          AAAAAAAAAADC  O      AAAAAAAAAAADC  O     AAAAAAAAAAAADC       AAAAAAAAAAAAADBB     AA                   AA                   AA                   AA                  XAA                   AA              MM   AA              BBBBBAA              AAAAAAA          N        AA       JJJJ        AA       BBBB        AA     N             AA  JJJJ             AA  BBBB             AA                   AAJ L                AAB L                AA   L               AA   L               AA   L               AA     M             AA   J M             AA   B M             AA      M            AA      M            AA      M            AA        N          AA      J  N         AA      B  N         AA          N        AA          N        AA          N        AA            O      AA          J  O     AA          B  O     AA              O    AA              O    AA              O    AA                L  AA              J  L AA              B  L AA                  LAA                  LAA                  LAA                   AA                  JAA    M             BAAOOOOB          OOOAAAOOOOA         BBBBAAAOOOOAJ         AAAAAAOOOOAB       L     AA    AA        L    AAJJJJAA MNJ     L   AABBBBAABBBB      L  AAAAAAAAAAAA       L AA                   AA                  XAA            NONO   AA        MM  BBBB   AA     L  BB         AA     B             AA                   AA     LLLL          AAN   TBBBBC    NN   AAN  TUAAAADCML NN   AAN BUAAAAAADBBBBBBBBAAN AAAAAAAAAAAAAAAAAAAN                  AAN                  AA                   AAJ LLL          OOO AABBBBB   MMMM   BBBNA         BBBB      NA                   NAA                  NAA        OOOO      NAA      TBBBBBC      AA  OOOTUAAAAADC OO JAABBBBBUAAAAAAADBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-level = level.split("");
-for (var t in level) {
-	level[t] = {type:level[t]!=" " ? level[t].charCodeAt(0)-64 : null};
-	if (level[t].type==2 && !level[t-21].type && mr.n()>0.8) {
-		level[t-21].type=[5,6,7,8,16,18][(mr.n()*6)|0];
-	}
-}
 
 
 //
@@ -143,6 +69,854 @@ speech[520] = " ";
 speech[610] = "Oh no!!!";
 speech[700] = "I need to find all of them!";
 speech[850] = " ";
+
+
+
+//
+// Init level
+//
+var level = "                     ";
+level+="                     ";
+level+="     B B BBB B B     ";
+level+="     A A A A A A     ";
+level+="     ABA A A ABA     ";
+level+="       A A A   A     ";
+level+="BBBC   A AAA   A TBBB";
+level+="AAADC   MM   I  TUAAA";
+level+="AAAADBBBBBBBBBBBUAAAA";
+level+="AAAAAAAAAAAAAAAAAAAAA";
+level+="AAAAAAAAAAAAAAAAAAAAA";
+level+="AAAAAAAAAAAAAAAAAAAAA";
+level+="AAAAAAAAAAAAAAAAAAAAA";
+level+="AAAAAC         TAAAAA";
+level+="AAAAADC       TUAAAAA";
+level+="AAAAAADC     TUAAAAAA";
+level+="AAAAAAADC   TUAAAAAAA";
+level+="AAAAAAAADB BUAAAAAAAA";
+level+="A                   A";
+level+="A                   A";
+level+="A         O         A";
+level+="A         O         A";
+level+="A         O         A";
+level+="A         O         A";
+level+="A                   A";
+level+="A         J         A";
+level+="A  BBBBBBBBBBBBBBBBBA";
+level+="A                   A";
+level+="A                   A";
+level+="A B                 A";
+level+="AJA                 A";
+level+="AAA                 A";
+level+="AAA                 A";
+level+="A               A   A";
+level+="A               A  XA";
+level+="A      WWXWW    AAAAA";
+level+="A      BBBBB    AAAAA";
+level+="A             TBAAAAA";
+level+="A            TUAAAAAA";
+level+="A           TUAAAAAAA";
+level+="A          TUAAAAAAAA";
+level+="A         TUAAAAAAAAA";
+level+="A        TUAAAAAAAAAA";
+level+="ABBBBBC             A";
+level+="AAAAAADC            A";
+level+="AAAAAAADC           A";
+level+="AAAAAAAADC          A";
+level+="AAAAAAAAADC         A";
+level+="AAAAAAAAAADC        A";
+level+="AAAAAAAAAAADC       A";
+level+="AAAAAAAAAAAADC      A";
+level+="AAAAAAAAAAAAADC     A";
+level+="AAAAAAAAAAAAAADB    A";
+level+="A              A    A";
+level+="A BB           A    A";
+level+="A A B               A";
+level+="A A A             JJA";
+level+="A A A          BBBBBA";
+level+="A AB                A";
+level+="A                   A";
+level+="A BBB               A";
+level+="A A A               A";
+level+="A AB  A N    N      A";
+level+="A A A AW           BA";
+level+="A A A A      N   N AA";
+level+="A     A           XAA";
+level+="A BBB A N    N     AA";
+level+="A A A AW           AA";
+level+="A ABA A      N   N AA";
+level+="A A A A           XAA";
+level+="A A A A N    N      A";
+level+="A     AW            A";
+level+="A A A A      N   N  A";
+level+="A A A A           XAA";
+level+="A ABA A N    N     AA";
+level+="A A A AW           AA";
+level+="A A A A          N AA";
+level+="A                 XAA";
+level+="A                   A";
+level+="A      W            A";
+level+="A      B            A";
+level+="A   BBBBBBBBBBBBBBBBA";
+level+="A                   A";
+level+="A                   A";
+level+="AJO                 A";
+level+="ABO                 A";
+level+="A O                 A";
+level+="A O                 A";
+level+="A O                 A";
+level+="ANJ                 A";
+level+="ANB                 A";
+level+="AN                  A";
+level+="AN                  A";
+level+="AN                  A";
+level+="AJM                 A";
+level+="ABM                 A";
+level+="A M                 A";
+level+="A M                 A";
+level+="ALM                 A";
+level+="ALJ                 A";
+level+="ALB       TB        A";
+level+="AL       TUAMLMOLMNLA";
+level+="AL      TUAAONLNMNLOA";
+level+="AL     TUAAALONLOLMNA";
+level+="AJ    TUAAAANLMOLMLOA";
+level+="AB   TUAAAAAJJJJJJJJA";
+level+="A   TUAAAAAABBBBBBBBA";
+level+="A  TUAAAAAAA        A";
+level+="A BUAAAAAAAA        A";
+level+="A AAAAAAAAAA        A";
+level+="A                   A";
+level+="A                   A";
+level+="A                LMNA";
+level+="AJ               OMLA";
+level+="ABBB             BBBA";
+level+="AAAA             AAAA";
+level+="A      L      L     A";
+level+="A      B      B     A";
+level+="A                   A";
+level+="A                   A";
+level+="A         LO        A";
+level+="A        WLOX       A";
+level+="A        ALOA       A";
+level+="A         LO        A";
+level+="A         LO        A";
+level+="A         LO        A";
+level+="A         LO        A";
+level+="A         LO        A";
+level+="A         JJ        A";
+level+="A         BB        A";
+level+="A       B    B      A";
+level+="A                   A";
+level+="A                   A";
+level+="A   B           B   A";
+level+="A                   A";
+level+="A                   A";
+level+="AB                 BA";
+level+="A                   A";
+level+="A                   A";
+level+="A   B           B   A";
+level+="A                   A";
+level+="A                   A";
+level+="ABBBBBBB     BBBBBBBA";
+level+="A                   A";
+level+="A                   A";
+level+="A      BBBBBBB      A";
+level+="A                   A";
+level+="A                   A";
+level+="A                   A";
+level+="A                   A";
+level+="AW                 XA";
+level+="ABBBBBBB     BBBBBBBA";
+level+="A      AW   XA      A";
+level+="A      AW   XA      A";
+level+="A      AW   XA      A";
+level+="A      AW   XA      A";
+level+="A      AW   XA      A";
+level+="A      AW   XA      A";
+level+="A      AW   XA      A";
+level+="A  A A AW   XA      A";
+level+="A  A A AW   XA      A";
+level+="A  AA  AW   XA      A";
+level+="A  A A AW   XA      A";
+level+="A  A A AW   XA      A";
+level+="A      AW   XA      A";
+level+="A  AAA AW   XA      A";
+level+="A    A AW   XA      A";
+level+="A    A AW   XA      A";
+level+="A   AA AW   XA      A";
+level+="A    A AW   XA      A";
+level+="A  AAA AW   XA      A";
+level+="A      AW   XA      A";
+level+="A   A  AW   XA      A";
+level+="A  AA  AW   XA      A";
+level+="A   A  AW   XA      A";
+level+="A   A  AW   XA      A";
+level+="A  AAA AW   XA      A";
+level+="A      AW   XA      A";
+level+="A      AW   XA      A";
+level+="A      AW   XA      A";
+level+="A  AAA AW   XA      A";
+level+="A  A   AW   XA      A";
+level+="A  AAA AW   XA      A";
+level+="A    A AW   XA      A";
+level+="A  AAA AW   XA      A";
+level+="A      AW   XA      A";
+level+="A  AAA AW   XA      A";
+level+="A    A AW   XA      A";
+level+="A    A AW   XA      A";
+level+="A  A A AW   XA      A";
+level+="A   AA AW   XA      A";
+level+="A      AW   XA      A";
+level+="A      AW   XA      A";
+level+="A      AW   XA      A";
+level+="A      A     A      A";
+level+="A      M            A";
+level+="A      M  J         A";
+level+="A   OO AAAAAAA      A";
+level+="A OO  O             A";
+level+="AO     OO           A";
+level+="AO       O   OO     A";
+level+="AO       O     O    A";
+level+="AW        OO    O   A";
+level+="A          O    O   A";
+level+="A          X     O  A";
+level+="A          A      O A";
+level+="A                   A";
+level+="A                  XA";
+level+="A                   A";
+level+="A  N B O B L B M B  A";
+level+="A  N A O A L A M A  A";
+level+="A  N A O A L A M A  A";
+level+="A  N A O A L A M A  A";
+level+="A  N A   A   A   A  A";
+level+="A  J A J A J A J    A";
+level+="AO BBBBBBBBBBBBBBBBBA";
+level+="AO                  A";
+level+="AO                  A";
+level+="AO                  A";
+level+="A                   A";
+level+="AJO                 A";
+level+="AAN                 A";
+level+="A M                 A";
+level+="A O              L  A";
+level+="A N          XNN  L A";
+level+="A M          BBB  L A";
+level+="A J          AAA   LA";
+level+="ABBB               LA";
+level+="AAAA               LA";
+level+="A  A                A";
+level+="A  A               JA";
+level+="A  ABBBBBB       O BA";
+level+="A                BBAA";
+level+="A                AAAA";
+level+="A            O      A";
+level+="A            B      A";
+level+="A            A      A";
+level+="A        O          A";
+level+="A        B          A";
+level+="A        A          A";
+level+="A    O              A";
+level+="A    B              A";
+level+="A    A              A";
+level+="A              BBBBBA";
+level+="AB     LLL     AAAAAA";
+level+="A      LLL          A";
+level+="A                   A";
+level+="ABBBBBBBBBBBBBBB    A";
+level+="AAAAAAAAAAAAAAAA    A";
+level+="A             NLM   A";
+level+="A            O   O  A";
+level+="A           O       A";
+level+="A          O        A";
+level+="A      T          JBA";
+level+="A     TU          AAA";
+level+="A    TUA           AA";
+level+="A   TUAAW J  B    XAA";
+level+="A BBUAAABBBBBABBBBAAA";
+level+="A A  NN   NN        A";
+level+="A A N  N N  N       A";
+level+="A        N  N       A";
+level+="A                   A";
+level+="A       B    B      A";
+level+="AJ      A    A      A";
+level+="ABBBBBBBA    ABB    A";
+level+="A                  XA";
+level+="A     LL     LL     A";
+level+="A     LL            A";
+level+="A            TBBBBB A";
+level+="A           TU      A";
+level+="AOBBBBBBBBBBU  OO   A";
+level+="AO                  A";
+level+="AO       OO         A";
+level+="AO                  A";
+level+="AO                  A";
+level+="A                   A";
+level+="AJ    N             A";
+level+="AB         O      JMA";
+level+="A     J           BMA";
+level+="A     B    J       MA";
+level+="A                  MA";
+level+="A                  MA";
+level+="A                   A";
+level+="A                  JA";
+level+="A                  BA";
+level+="A                   A";
+level+="ALNNN     O        BA";
+level+="ALBBB           O   A";
+level+="AL        J         A";
+level+="AL        B     J   A";
+level+="AL              B   A";
+level+="AL                  A";
+level+="AJMNMNMNMNMNMNMNMN  A";
+level+="ABBBBBBBBBBBBBBBBBB A";
+level+="A                  OA";
+level+="A                  OA";
+level+="A                  OA";
+level+="A                  OA";
+level+="A                   A";
+level+="A                  JA";
+level+="ANLMNOL          OTBA";
+level+="ANBBBBB          BUAA";
+level+="AN        J         A";
+level+="AN        B         A";
+level+="AN                  A";
+level+="AN                  A";
+level+="AJ                  A";
+level+="ABBBBB         M    A";
+level+="A      N       B  N A";
+level+="A     LB    O     B A";
+level+="A     L     B       A";
+level+="A     L        L    A";
+level+="A     L        B    A";
+level+="A     BCOOOOOOOOOOOOA";
+level+="A     ADBBBBBBBBBBBBA";
+level+="A       AAAAAAAAAAAAA";
+level+="AW      AAAAAAAAAAAAA";
+level+="A       A           A";
+level+="A       A           A";
+level+="A       A           A";
+level+="A       A           A";
+level+="A     X A           A";
+level+="A     AAA           A";
+level+="A       A           A";
+level+="A       A           A";
+level+="A       A           A";
+level+="AW      A OL        A";
+level+="A       A NM        A";
+level+="A       A OL        A";
+level+="A       A NM        A";
+level+="A       A OL        A";
+level+="A       A NM        A";
+level+="A     X AJOL        A";
+level+="A     AAAB   MMM    A";
+level+="A            BBB    A";
+level+="A                 OOA";
+level+="A                 BBA";
+level+="AW             MLM  A";
+level+="ABBBBBC        ONO  A";
+level+="AAAAAADC     BBBBBBBA";
+level+="AAAAAAADC    AAAAAAAA";
+level+="AAAAAAAADC          A";
+level+="AAAAAAAAADC  O      A";
+level+="AAAAAAAAAADC  O     A";
+level+="AAAAAAAAAAADC       A";
+level+="AAAAAAAAAAAADBB     A";
+level+="A                   A";
+level+="A                   A";
+level+="A                   A";
+level+="A                  XA";
+level+="A                   A";
+level+="A              MM   A";
+level+="A              BBBBBA";
+level+="A              AAAAAA";
+level+="A          N        A";
+level+="A       JJJJ        A";
+level+="A       BBBB        A";
+level+="A     N             A";
+level+="A  JJJJ             A";
+level+="A  BBBB             A";
+level+="A                   A";
+level+="AJ L                A";
+level+="AB L                A";
+level+="A   L               A";
+level+="A   L               A";
+level+="A   L               A";
+level+="A     M             A";
+level+="A   J M             A";
+level+="A   B M             A";
+level+="A      M            A";
+level+="A      M            A";
+level+="A      M            A";
+level+="A        N          A";
+level+="A      J  N         A";
+level+="A      B  N         A";
+level+="A          N        A";
+level+="A          N        A";
+level+="A          N        A";
+level+="A            O      A";
+level+="A          J  O     A";
+level+="A          B  O     A";
+level+="A              O    A";
+level+="A              O    A";
+level+="A              O    A";
+level+="A                L  A";
+level+="A              J  L A";
+level+="A              B  L A";
+level+="A                  LA";
+level+="A                  LA";
+level+="A                  LA";
+level+="A                   A";
+level+="A                  JA";
+level+="A    M             BA";
+level+="AOOOOB          OOOAA";
+level+="AOOOOA         BBBBAA";
+level+="AOOOOAJ         AAAAA";
+level+="AOOOOAB       L     A";
+level+="A    AA        L    A";
+level+="AJJJJAA MNJ     L   A";
+level+="ABBBBAABBBB      L  A";
+level+="AAAAAAAAAAA       L A";
+level+="A                   A";
+level+="A                  XA";
+level+="A            NONO   A";
+level+="A        MM  BBBB   A";
+level+="A     L  BB         A";
+level+="A     B             A";
+level+="A                   A";
+level+="A     LLLL          A";
+level+="AN   TBBBBC    NN   A";
+level+="AN  TUAAAADCML NN   A";
+level+="AN BUAAAAAADBBBBBBBBA";
+level+="AN AAAAAAAAAAAAAAAAAA";
+level+="AN                  A";
+level+="AN                  A";
+level+="A                   A";
+level+="AJ LLL          OOO A";
+level+="ABBBBB   MMMM   BBBNA";
+level+="         BBBB      NA";
+level+="                   NA";
+level+="A                  NA";
+level+="A        OOOO      NA";
+level+="A      TBBBBBC      A";
+level+="A  OOOTUAAAAADC OO JA";
+level+="ABBBBBUAAAAAAADBBBBBA";
+level+="AAAAAAAAAAAAAAAAAAAAA";
+level+="AAAAAAAAAAAAAAAAAAAAA";
+level+="AAAAAAAAAAAAAAAAAAAAA";
+level+="AAAAAAAAAAAAAAAAAAAAA";
+level+="AAAAAAAAAAAAAAAAAAAAA";
+level+="AAAAAAAAAAAAAAAAAAAAA";
+
+
+
+
+//
+// GEMS in explosion at start
+//
+GEMS = function(x, y) {
+	this.x = x;
+	this.y = y;
+	this.speed = 5 + Math.random()*15;
+	this.angle = Math.random()*Math.PI*2;
+	this.life = 300;
+	this.tileNumber = [11,12,13,14][(Math.random()*4)|0];
+	this.vY = -10;
+	this.update = function() {
+		this.life--;
+		if (!this.life) {
+			gems = [];
+		}
+		this.vY+=0.1;
+		ctx.drawImage(img,this.tileNumber*48,0,48,48,this.x,this.y,48,48);
+		this.x+=Math.sin(this.angle)*this.speed;
+		this.y+=Math.cos(this.angle)*this.speed+this.vY;
+	}
+}
+
+//
+// Show sprite image accordinalty the state
+//
+SPRITE = function(startFrame, lastFrame, r) {
+	this.frameIndex = startFrame;
+	this.startFrame = startFrame;
+	this.lastFrame = lastFrame;
+	this.wait = 0;
+	this.image = new Image();
+	var name = "p.png"+(r  ? "R" : "");
+	this.name = name;
+	this.r = r;
+	
+	if (!images[name]) {
+		images[name] = new Image();
+		images[name].src = name.replace("R", "");
+		if (this.r) {
+			images[name].onload = function() {
+				//Parser chaque sprite de l'image pour les retourner sur l'axe X
+				if (this._m) { return; }
+				var m = document.createElement("canvas");
+				m.width = 576;
+				m.height = 32;
+				var ctx3 = m.getContext("2d");
+				ctx3.translate(576,0);
+				ctx3.scale(-1, 1);
+				for (var i=0; i<18; i++) {
+					ctx3.drawImage(this,i*32, 0, 32, 32, (18-i)*32, 0, 32, 32);
+				}
+				this.src = m.toDataURL();
+				this._m = 1;
+			}
+		}
+	}
+	
+	this.update = function() {
+		if (this.wait>0) {
+			this.wait--;
+		} else {
+			this.wait = 3;
+			if (++this.frameIndex>=this.lastFrame) {
+				this.frameIndex = this.startFrame;
+			}
+		}
+		this.draw();
+	}
+	this.draw = function () {
+		ctx.drawImage(
+			images[this.name],
+			this.frameIndex * 32,
+			0,
+			32,
+			32,
+			this.x,
+			this.y+deltaY,
+			48,
+			48
+		);
+		deltaY = -this.y + 256;
+	};
+}
+
+PLAYER = function(x, y) {
+	this.state = "idle";
+	this.x=x;
+	this.y = y;
+	this.direction = 1;
+	this.sprites = {};
+	this.velocity = {x:0, y:1};
+	this.jumpStop = 1;
+	
+	this.sprites.idle = new SPRITE(6, 11);
+	this.sprites.idleL = new SPRITE(6, 11, 1);
+	
+	this.sprites.walk = new SPRITE(1, 5);
+	this.sprites.walkL = new SPRITE(1, 5, 1);
+	
+	this.sprites.jump = new SPRITE(12, 14);
+	this.sprites.jumpL = new SPRITE(12, 14, 1);
+	
+	this.sprites.fall = new SPRITE(15, 17);
+	this.sprites.fallL = new SPRITE(15, 17, 1);
+	
+	this.sprite = this.sprites[this.state];
+	this.update = function() {
+		var oldState = this.state;
+		floor2.innerHTML = 424 - (this.y/48)|0;
+		if (Math.round(this.y/48)==20) {
+			go = false;
+			keys = [];
+			f.innerHTML = "CONGRATULATIONS !<br/>You reach the 404th floor in "+ti.innerHTML+"<br/>"+score+" / 404 gems found<br/><br/><a href='//twitter.com/intent/tweet?hashtags=js13k&url="+location+"&text=I beat "+document.title+" in "+ti.innerHTML+" with "+score+"/404 gems !'>Share on twitter</a>";
+			
+			f.style.display="flex";
+		}
+		
+		if (this.state!="jump" && this.state!="fall") {
+			this.velocity.x = 0;
+			if (keys[39]) {
+				this.velocity.x = 6;
+				this.direction = 1;
+			} else if (keys[37]) {
+				this.velocity.x = -6;
+				this.direction = 0;
+			}
+			
+			if (keys[38]) {
+				if (this.jumpStop) {
+					this.velocity.y = -18;
+					sound([0,,0.1945,,0.2019,0.3725,,0.2486,,,,,,0.3973,,,,,1,,,0.0979,,0.5]);
+					this.jumpStop = 0;
+				}
+			}
+		} else {
+			if (keys[39]) {
+				this.direction = 1;
+				if (this.velocity.x<0) {
+					this.velocity.x*=0.90;
+				}
+				if (this.velocity.x>6.2) {
+					this.velocity.x*=0.95;
+				}
+				if (this.velocity.x<6.2) {
+					this.velocity.x+=0.5;
+				}
+			} else if (keys[37]) {
+				this.direction = 0;
+				if (this.velocity.x>0) {
+					this.velocity.x*=0.90;
+				}
+				if (this.velocity.x<-6.2) {
+					this.velocity.x*=0.95;
+				}
+				if (this.velocity.x>-6.2) {
+					this.velocity.x-=0.5;
+				}
+			} else {
+				this.velocity.x*=0.90;
+			}
+		}
+		this.velocity.y+=1.01;
+		if (this.velocity.y>47) {
+			this.velocity.y = 47;
+		}
+		var onSlope = 0;
+		if (this.velocity.y>0) {
+			y = 48;
+			for (x of [24,12,36]) {
+				if (c = getTile(this.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
+					this.velocity.y = 0;
+					this.y = c.y - 48;
+					switch (c.type) {
+						case 10:
+						case 11:
+							this.velocity.y = -24;
+							this.state = "jump";
+							c.type=11;
+							c.returnTo = 5;
+							sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
+							break;
+						case 23:
+						case 24:
+							this.velocity.y = -25;
+							this.velocity.x = c.type==23 ? 24 : -24;
+							this.state = "jump";
+							player.x = c.x;
+							sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
+							//break;
+						case 3: //Pente qui monte vers la gauche
+							this.y+=Math.min(48, this.x +24 + this.velocity.x - c.x);
+							onSlope = 1;
+							break;
+						
+						case 20: //Pente qui monte vers la droite
+							this.y+=Math.min(48,48-(this.x + 24 + this.velocity.x - c.x));
+							onSlope = 1;
+							break;
+					}
+					break;
+				}
+			}
+		}
+		if (!onSlope) { 
+			if (this.velocity.y<0) {
+				y = 0;
+				for (var x=12; x<=36; x+=12) {
+					if (c = getTile(this.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
+						this.velocity.y = 0;
+						this.y = c.y + 48;
+						break;
+					}
+				}
+			}
+			if (this.velocity.x>0) {
+				x = 48;
+				a:
+				for (var y=0; y<=47; y+=12) {
+					if (c = getTile(this.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
+						switch (c.type) {
+							case 3:
+								continue;
+							case 23:
+							case 24:
+								this.velocity.y = -25;
+								this.velocity.x = c.type==23 ? 24 : -24;
+								this.state = "jump";
+								player.x = c.x;
+								sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
+								break a;
+							case 20:
+								this.y+=Math.min(0, -(this.x+24+this.velocity.x - c.x));
+								break a;
+						}
+						this.velocity.x = 0;
+						this.x = c.x - 48;
+						break;
+					}
+				}
+			}
+			if (this.velocity.x<0) {
+				x = 0;
+				a:
+				for (var y=0; y<=47; y+=12) {
+					if (c = getTile(this.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
+						switch (c.type) {
+							case 20:
+								continue;
+							case 23:
+							case 24:
+								this.velocity.y = -25;
+								this.velocity.x = c.type==23 ? 24 : -24;
+								this.state = "jump";
+								player.x = c.x;
+								sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
+								break a;
+							case 3:
+								this.y+=Math.min(48, Math.min(48,this.x+24+this.velocity.x - c.x)-48);
+								break a;
+						}
+						this.velocity.x = 0;
+						this.x = c.x + 48;
+						break;
+					}
+				}
+			}
+		}
+		
+		this.state = "idle";
+		if (this.velocity.x!=0) {
+			this.state = "walk";
+		}
+		if (this.velocity.y>0) {
+			this.state = "fall";
+		} else if (this.velocity.y<0) {
+			this.state = "jump";
+		}
+		
+		if ((oldState=="fall" || oldState=="jump") && (this.state=="walk" || this.state=="idle")) {
+			sound([3,,0.0137,,0.1662,0.31,,-0.5727,,,,,,,,,,,1,,,,,0.5]);
+		}
+		
+		this.y+=this.velocity.y;
+		this.x+=this.velocity.x;
+		this.sprite = this.sprites[this.state+(!this.direction ? "L" : "")];
+		this.sprite.x = this.x + extraX;
+		this.sprite.y = this.y + extraY; // + penteY;
+		this.sprite.update();
+	}
+}
+
+
+//
+// Generate a mountain and draw it in a canva
+//
+generateMountain = function(s) {
+	v = 480;
+	t = [(mr.n() * v)|0, (mr.n() * v)|0];
+	while(t.length < mountain.width) {
+		v *= 0.52;
+		t = function(o, v) {
+			n = [o[0]];
+			for(i = 1; i < o.length; i++) {
+				n.push(((o[i - 1] + o[i]) / 2 + ((Math.random() - 0.5) * v))|0);
+				n.push(o[i]);
+			}
+			return n;
+		}(t, v);
+	}
+	var ctx = mountain.getContext("2d");
+	var grd=ctx.createLinearGradient(0,mountain.height,0,0);
+	grd.addColorStop(0,"#000");
+	grd.addColorStop(0.95,"rgb(200,"+(mr.n()*255)+",200)");
+	ctx.strokeStyle = grd;
+
+	for(i = 0; i < mountain.width; i++) {
+		ctx.beginPath();
+		ctx.moveTo(i + 0.5, mountain.height - t[i]);
+		ctx.lineTo(i + 0.5, mountain.height);
+		ctx.stroke();
+	}
+}
+
+//
+// Return a tile from it position
+//
+getTile = function(x, y) {
+	var i = (x/48+(((y/48)|0)*21))|0;
+	if (!level[i]) {
+		return null;
+	}
+	if ([12,13,14,15].indexOf(level[i].type)!=-1) {
+		sound([0,,0.0202,0.4332,0.3526,0.46,,,,,,0.5604,0.6381,,,,,,1,,,,,0.5]);
+		sc.innerHTML = ++score+"/404";
+		level[i].type = null;
+		return null;
+	}
+	return level[i].type!=null && [4,5,6,7,8,16,18].indexOf(level[i].type)==-1 ? level[i] : null;
+}
+
+//
+// Init music
+//
+initAudio = function() {
+	var context = new AudioContext();
+	var gainNode = context.createGain();
+	var music = context.createBufferSource();
+	gainNode.connect(context.destination);
+	
+	context.decodeAudioData(wave.buffer, function(buffer){
+		music.buffer = buffer; // Attatch our Audio Data as it's Buffer
+		music.connect(gainNode);  // Link the Sound to the Output
+		music.loop = 1;
+		music.loopStart = 16;
+		music.loopEnd = 48;
+		music.start(0); // Play the Sound Immediately
+	});
+}
+
+//
+// Init pseudo random for mountain and decorations
+//
+mr = new random(200);
+
+
+//
+// Init game, canvas, player
+//
+load = function(s) {
+	
+	//
+	// Generate mountains
+	//
+	generateMountain();
+	generateMountain();
+	generateMountain();
+	mr.n();
+
+	//
+	// Explode level in array and compute decorations
+	//
+	level = level.split("");
+	for (var t in level) {
+		level[t] = {type:level[t]!=" " ? level[t].charCodeAt(0)-64 : null};
+		if (level[t].type==2 && !level[t-21].type && mr.n()>0.8) { //Place random decoration
+			level[t-21].type=[5,6,7,8,16,18][(mr.n()*6)|0];
+		}
+	}
+	
+	c.width = 1008;
+	c.height = 480;
+	ctx = c.getContext("2d");
+	ctx.fillStyle = "#D0F4F7"; //Sky color
+
+	player = new PLAYER(40,200);
+	
+	img = new Image();
+	img.src = 't.png';
+	img.onload = function() {
+		for (var i=0; i<10; i++) {
+			clouds.push({x:Math.random()*1224, y:Math.random()*250, size:0.5+Math.random()/2, speed:Math.max(0.25, Math.random())});
+		}
+	}
+	onresize();
+	gameLoop();
+}
 
 
 //
@@ -189,7 +963,7 @@ function gameLoop (t) {
 		}
 		if (frame==990) {
 			player.jumpStop = 1;
-			allowKeys = 1;
+			allowKeys = true;
 			floor.style.display = "block";
 			ti.style.display = "block";
 			sc.style.display = "block";
@@ -214,8 +988,6 @@ function gameLoop (t) {
 	//
 	ctx.drawImage(mountain,0,0,1008,592);
 
-	
-	
 	//
 	// Draw tiles which are visible on the screen
 	//
@@ -307,99 +1079,12 @@ function gameLoop (t) {
 }
 
 
-//
-// GEMS in explosion at start
-//
-GEMS = function(x, y) {
-	this.x = x;
-	this.y = y;
-	this.speed = 5 + Math.random()*15;
-	this.angle = Math.random()*Math.PI*2;
-	this.life = 300;
-	this.tileNumber = [11,12,13,14][(Math.random()*4)|0];
-	this.vY = -10;
-	this.update = function() {
-		this.life--;
-		if (!this.life) {
-			gems = [];
-		}
-		this.vY+=0.1;
-		ctx.drawImage(img,this.tileNumber*48,0,48,48,this.x,this.y,48,48);
-		this.x+=Math.sin(this.angle)*this.speed;
-		this.y+=Math.cos(this.angle)*this.speed+this.vY;
-	}
-}
+
+
 
 //
-// Show sprite image accordinalty the state
+// Events handlers
 //
-SPRITE = function(startFrame, lastFrame, r) {
-	this.frameIndex = startFrame;
-	this.startFrame = startFrame;
-	this.lastFrame = lastFrame;
-	this.wait = 0;
-	this.image = new Image();
-	var name = "p.png"+(r  ? "R" : "");
-	this.name = name;
-	this.r = r;
-	
-	if (!images[name]) {
-		images[name] = new Image();
-		images[name].src = name.replace("R", "");
-		if (this.r) {
-			images[name].onload = function() {
-				//Parser chaque sprite de l'image pour les retourner sur l'axe X
-				if (this._m) { return; }
-				var m = document.createElement("canvas");
-				m.width = 576;
-				m.height = 32;
-				var ctx3 = m.getContext("2d");
-				ctx3.translate(576,0);
-				ctx3.scale(-1, 1);
-				for (var i=0; i<18; i++) {
-					ctx3.drawImage(this,i*32, 0, 32, 32, (18-i)*32, 0, 32, 32);
-				}
-				this.src = m.toDataURL();
-				this._m = 1;
-			}
-		}
-	}
-	
-	this.update = function() {
-		if (this.wait>0) {
-			this.wait--;
-		} else {
-			this.wait = 3;
-			if (++this.frameIndex>=this.lastFrame) {
-				this.frameIndex = this.startFrame;
-			}
-		}
-		this.draw();
-	}
-	this.draw = function () {
-		ctx.drawImage(
-			images[this.name],
-			this.frameIndex * 32,
-			0,
-			32,
-			32,
-			this.x,
-			this.y+deltaY,
-			48,
-			48
-		);
-		deltaY = -this.y + 256;
-	};
-}
-
-
-
-var score = 0;
-keys = [];
-deltaY = 0;
-allowKeys = 0;
-
-
 document.onkeydown = function(e) {
 	if (allowKeys) {
 		keys[e.keyCode] = 1;
@@ -414,231 +1099,27 @@ document.onkeyup = function(e) {
 	}
 	if (!gameStarted) {
 		h.remove();
-		iA();
-		gameStarted = 1;
+		initAudio();
+		gameStarted = true;
 	}
+}
+onresize = function() {
+        r = (1008/480);
+	if (innerWidth / innerHeight <= r) {
+		W = innerWidth;
+		H = W / r;
+	} else {
+		H = innerHeight;
+		W = H * r;
+	}
+	a.style.width = W + 'px';
+	a.style.height = H + 'px';
+	o.style.transform = "scale("+(scale = W/1008)+")";
 }
 
-getTile = function(x, y) {
-	var i = (x/48+(((y/48)|0)*21))|0;
-	if (!level[i]) {
-		return null;
-	}
-	if ([12,13,14,15].indexOf(level[i].type)!=-1) {
-		sound([0,,0.0202,0.4332,0.3526,0.46,,,,,,0.5604,0.6381,,,,,,1,,,,,0.5]);
-		sc.innerHTML = ++score+"/404";
-		level[i].type = null;
-		return null;
-	}
-	return level[i].type!=null && [4,5,6,7,8,16,18].indexOf(level[i].type)==-1 ? level[i] : null;
-}
 
-PLAYER = function(x, y) {
-	this.state = "idle";
-	this.x=x;
-	this.y = y;
-	this.direction = 1;
-	this.sprites = {};
-	this.velocity = {x:0, y:1};
-	this.jumpStop = 1;
-	
-	this.sprites.idle = new SPRITE(6, 11);
-	this.sprites.idleL = new SPRITE(6, 11, 1);
-	
-	this.sprites.walk = new SPRITE(1, 5);
-	this.sprites.walkL = new SPRITE(1, 5, 1);
-	
-	this.sprites.jump = new SPRITE(12, 14);
-	this.sprites.jumpL = new SPRITE(12, 14, 1);
-	
-	this.sprites.fall = new SPRITE(15, 17);
-	this.sprites.fallL = new SPRITE(15, 17, 1);
-	
-	this.sprite = this.sprites[this.state];
-	this.update = function() {
-		var oldState = this.state;
-		floor2.innerHTML = 424 - (this.y/48)|0;
-		if (Math.round(this.y/48)==20) {
-			go = 0;
-			keys = [];
-			f.innerHTML = "CONGRATULATIONS !<br/>You reach the 404th floor in "+ti.innerHTML+"<br/>"+score+" / 404 gems found<br/><br/><a href='//twitter.com/intent/tweet?hashtags=js13k&url="+location+"&text=I beat "+document.title+" in "+ti.innerHTML+" with "+score+"/404 gems !'>Share on twitter</a>";
-			
-			f.style.display="flex";
-		}
-		
-		if (this.state!="jump" && this.state!="fall") {
-			this.velocity.x = 0;
-			if (keys[39]) {
-				this.velocity.x = 6;
-				this.direction = 1;
-			} else if (keys[37]) {
-				this.velocity.x = -6;
-				this.direction = 0;
-			}
-			
-			if (keys[38]) {
-				if (this.jumpStop) {
-					this.velocity.y = -18;
-					sound([0,,0.1945,,0.2019,0.3725,,0.2486,,,,,,0.3973,,,,,1,,,0.0979,,0.5]);
-					this.jumpStop = 0;
-				}
-			}
-		} else {
-			if (keys[39]) {
-				this.direction = 1;
-				if (this.velocity.x<0) {
-					this.velocity.x*=0.90;
-				}
-				if (this.velocity.x>6.2) {
-					this.velocity.x*=0.95;
-				}
-				if (this.velocity.x<6.2) {
-					this.velocity.x+=0.5;
-				}
-			} else if (keys[37]) {
-				this.direction = 0;
-				if (this.velocity.x>0) {
-					this.velocity.x*=0.90;
-				}
-				if (this.velocity.x<-6.2) {
-					this.velocity.x*=0.95;
-				}
-				if (this.velocity.x>-6.2) {
-					this.velocity.x-=0.5;
-				}
-			} else {
-				this.velocity.x*=0.90;
-			}
-		}
-		this.velocity.y+=1.01;
-		if (this.velocity.y>47) {
-			this.velocity.y = 47;
-		}
-		var onSlope = 0;
-		if (this.velocity.y>0) {
-			y = 48;
-			for (x of [24,12,36]) {
-				if (c = getTilethis.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
-					this.velocity.y = 0;
-					this.y = c.y - 48;
-					switch (c.type) {
-						case 10:
-						case 11:
-							this.velocity.y = -24;
-							this.state = "jump";
-							c.type=11;
-							c.returnTo = 5;
-							sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
-							break;
-						case 23:
-						case 24:
-							this.velocity.y = -25;
-							this.velocity.x = c.type==23 ? 24 : -24;
-							this.state = "jump";
-							player.x = c.x;
-							sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
-							//break;
-						case 3: //Pente qui monte vers la gauche
-							this.y+=Math.min(48, this.x +24 + this.velocity.x - c.x);
-							onSlope = 1;
-							break;
-						
-						case 20: //Pente qui monte vers la droite
-							this.y+=Math.min(48,48-(this.x + 24 + this.velocity.x - c.x));
-							onSlope = 1;
-							break;
-					}
-					break;
-				}
-			}
-		}
-		if (!onSlope) { 
-			if (this.velocity.y<0) {
-				y = 0;
-				for (var x=12; x<=36; x+=12) {
-					if (c = getTilethis.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
-						this.velocity.y = 0;
-						this.y = c.y + 48;
-						break;
-					}
-				}
-			}
-			if (this.velocity.x>0) {
-				x = 48;
-				a:
-				for (var y=0; y<=47; y+=12) {
-					if (c = getTilethis.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
-						switch (c.type) {
-							case 3:
-								continue;
-							case 23:
-							case 24:
-								this.velocity.y = -25;
-								this.velocity.x = c.type==23 ? 24 : -24;
-								this.state = "jump";
-								player.x = c.x;
-								sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
-								break a;
-							case 20:
-								this.y+=Math.min(0, -(this.x+24+this.velocity.x - c.x));
-								break a;
-						}
-						this.velocity.x = 0;
-						this.x = c.x - 48;
-						break;
-					}
-				}
-			}
-			if (this.velocity.x<0) {
-				x = 0;
-				a:
-				for (var y=0; y<=47; y+=12) {
-					if (c = getTilethis.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
-						switch (c.type) {
-							case 20:
-								continue;
-							case 23:
-							case 24:
-								this.velocity.y = -25;
-								this.velocity.x = c.type==23 ? 24 : -24;
-								this.state = "jump";
-								player.x = c.x;
-								sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
-								break a;
-							case 3:
-								this.y+=Math.min(48, Math.min(48,this.x+24+this.velocity.x - c.x)-48);
-								break a;
-						}
-						this.velocity.x = 0;
-						this.x = c.x + 48;
-						break;
-					}
-				}
-			}
-		}
-		
-		this.state = "idle";
-		if (this.velocity.x!=0) {
-			this.state = "walk";
-		}
-		if (this.velocity.y>0) {
-			this.state = "fall";
-		} else if (this.velocity.y<0) {
-			this.state = "jump";
-		}
-		
-		if ((oldState=="fall" || oldState=="jump") && (this.state=="walk" || this.state=="idle")) {
-			sound([3,,0.0137,,0.1662,0.31,,-0.5727,,,,,,,,,,,1,,,,,0.5]);
-		}
-		
-		this.y+=this.velocity.y;
-		this.x+=this.velocity.x;
-		this.sprite = this.sprites[this.state+(!this.direction ? "L" : "")];
-		this.sprite.x = this.x + extraX;
-		this.sprite.y = this.y + extraY; // + penteY;
-		this.sprite.update();
-	}
-}
+
+
 
 
 
@@ -1259,40 +1740,12 @@ var CPlayer = function() {
 
 };
 
-iA = function() {
-	var context = new AudioContext();
-	var gainNode = context.createGain();
-	var music = context.createBufferSource();
-	gainNode.connect(context.destination);
-	
-	context.decodeAudioData(wave.buffer, function(buffer){
-		music.buffer = buffer; // Attatch our Audio Data as it's Buffer
-		music.connect(gainNode);  // Link the Sound to the Output
-		music.loop = 1;
-		music.loopStart = 16;
-		music.loopEnd = 48;
-		music.start(0); // Play the Sound Immediately
-	});
-}
+
 
 //
-// Generate music at start de la musique
+// Generate music at start
 //
 var m = new CPlayer();
 while (!m.gen()) { }
 var wave = m.create();
 var scale=1;
-
-onresize = function() {
-        r = (1008/480);
-	if (innerWidth / innerHeight <= r) {
-		W = innerWidth;
-		H = W / r;
-	} else {
-		H = innerHeight;
-		W = H * r;
-	}
-	a.style.width = W + 'px';
-	a.style.height = H + 'px';
-	o.style.transform = "scale("+(scale = W/1008)+")";
-}
