@@ -1,113 +1,7 @@
-function sp() {
-    this._s = function(a) {
-        for (var b = 0; b < 24; b++) this[String.fromCharCode(97 + b)] = a[b] || 0;
-        this.c < .01 && (this.c = .01);
-        var c = this.b + this.c + this.e;
-        if (c < .18) {
-            var d = .18 / c;
-            this.b *= d, this.c *= d, this.e *= d
-        }
-    }
-}
-
-function ss() {
-    this._p = new sp;
-    var a, b, c, d, e, f, g, h, i, j, k, l;
-    this.reset = function() {
-        var a = this._p;
-        d = 100 / (a.f * a.f + .001), e = 100 / (a.g * a.g + .001), f = 1 - a.h * a.h * a.h * .01, g = -a.i * a.i * a.i * 1e-6, a.a || (k = .5 - a.n / 2, l = 5e-5 * -a.o), h = 1 + a.l * a.l * (a.l > 0 ? -.9 : 10), i = 0, j = 1 == a.m ? 0 : (1 - a.m) * (1 - a.m) * 2e4 + 32
-    }, this.tr = function() {
-        this.reset();
-        var d = this._p;
-        return a = d.b * d.b * 1e5, b = d.c * d.c * 1e5, c = d.e * d.e * 1e5 + 12, 3 * ((a + b + c) / 3 | 0)
-    }, this._s = function(m, n) {
-        var o = this._p,
-            p = 1 != o.s || o.v,
-            q = o.v * o.v * .1,
-            r = 1 + 3e-4 * o.w,
-            s = o.s * o.s * o.s * .1,
-            t = 1 + 1e-4 * o.t,
-            u = 1 != o.s,
-            v = o.x * o.x,
-            w = o.g,
-            x = o.q || o.r,
-            y = o.r * o.r * o.r * .2,
-            z = o.q * o.q * (o.q < 0 ? -1020 : 1020),
-            A = o.p ? ((1 - o.p) * (1 - o.p) * 2e4 | 0) + 32 : 0,
-            B = o.d,
-            C = o.j / 2,
-            D = o.k * o.k * .01,
-            E = o.a,
-            F = a,
-            G = 1 / a,
-            H = 1 / b,
-            I = 1 / c,
-            J = 5 / (1 + o.u * o.u * 20) * (.01 + s);
-        J > .8 && (J = .8), J = 1 - J;
-        for (var Q, S, U, W, Y, Z, K = !1, L = 0, M = 0, N = 0, O = 0, P = 0, R = 0, T = 0, V = 0, X = 0, $ = 0, _ = new Array(1024), aa = new Array(32), ba = _.length; ba--;) _[ba] = 0;
-        for (var ba = aa.length; ba--;) aa[ba] = 2 * Math.random() - 1;
-        for (var ba = 0; ba < n; ba++) {
-            if (K) return ba;
-            if (A && ++X >= A && (X = 0, this.reset()), j && ++i >= j && (j = 0, d *= h), f += g, d *= f, d > e && (d = e, w > 0 && (K = !0)), S = d, C > 0 && ($ += D, S *= 1 + Math.sin($) * C), S |= 0, S < 8 && (S = 8), E || (k += l, k < 0 ? k = 0 : k > .5 && (k = .5)), ++M > F) switch (M = 0, ++L) {
-                case 1:
-                    F = b;
-                    break;
-                case 2:
-                    F = c
-            }
-            switch (L) {
-                case 0:
-                    N = M * G;
-                    break;
-                case 1:
-                    N = 1 + 2 * (1 - M * H) * B;
-                    break;
-                case 2:
-                    N = 1 - M * I;
-                    break;
-                case 3:
-                    N = 0, K = !0
-            }
-            x && (z += y, U = 0 | z, U < 0 ? U = -U : U > 1023 && (U = 1023)), p && r && (q *= r, q < 1e-5 ? q = 1e-5 : q > .1 && (q = .1)), Z = 0;
-            for (var ca = 8; ca--;) {
-                if (T++, T >= S && (T %= S, 3 == E))
-                    for (var da = aa.length; da--;) aa[da] = 2 * Math.random() - 1;
-                switch (E) {
-                    case 0:
-                        Y = T / S < k ? .5 : -.5;
-                        break;
-                    case 1:
-                        Y = 1 - T / S * 2;
-                        break;
-                    case 2:
-                        W = T / S, W = 6.28318531 * (W > .5 ? W - 1 : W), Y = 1.27323954 * W + .405284735 * W * W * (W < 0 ? 1 : -1), Y = .225 * ((Y < 0 ? -1 : 1) * Y * Y - Y) + Y;
-                        break;
-                    case 3:
-                        Y = aa[Math.abs(32 * T / S | 0)]
-                }
-                p && (Q = R, s *= t, s < 0 ? s = 0 : s > .1 && (s = .1), u ? (P += (Y - R) * s, P *= J) : (R = Y, P = 0), R += P, O += R - Q, O *= 1 - q, Y = O), x && (_[V % 1024] = Y, Y += _[(V - U + 1024) % 1024], V++), Z += Y
-            }
-            Z *= .125 * N * v, m[ba] = Z >= 1 ? 1 : Z <= -1 ? -1 : Z
-        }
-        return n
-    }
-}
-var synth = new ss;
-var ac;
-sound = function(a) {
-	if (!gs) { return; }
-	var b = function(a) {
-	//	debugger;
-		ac = ac || new AudioContext;
-		synth._p._s(a);
-		var c = synth.tr();
-		var e = ac.createBuffer(1, c + 1, ac.sampleRate);
-		synth._s(e.getChannelData(0), c);
-		return e
-	}(a),
-	d = ac.createBufferSource();
-    d.buffer = b, d.connect(ac.destination), d.start(ac.currentTime)
-};
+//
+// JsFXR
+//
+function sp(){this._s=function(e){for(var t=0;t<24;t++)this[String.fromCharCode(97+t)]=e[t]||0;this.c<.01&&(this.c=.01);var r=this.b+this.c+this.e;if(r<.18){var s=.18/r;this.b*=s,this.c*=s,this.e*=s}}}function ss(){var e,t,r,s,a,n,i,c,h,f,o,u;this._p=new sp,this.reset=function(){var e=this._p;s=100/(e.f*e.f+.001),a=100/(e.g*e.g+.001),n=1-e.h*e.h*e.h*.01,i=-e.i*e.i*e.i*1e-6,e.a||(o=.5-e.n/2,u=5e-5*-e.o),c=1+e.l*e.l*(e.l>0?-.9:10),h=0,f=1==e.m?0:(1-e.m)*(1-e.m)*2e4+32},this.tr=function(){this.reset();var s=this._p;return e=s.b*s.b*1e5,t=s.c*s.c*1e5,r=s.e*s.e*1e5+12,3*((e+t+r)/3|0)},this._s=function(v,b){var p=this._p,g=1!=p.s||p.v,k=p.v*p.v*.1,w=1+3e-4*p.w,_=p.s*p.s*p.s*.1,l=1+1e-4*p.t,m=1!=p.s,d=p.x*p.x,y=p.g,q=p.q||p.r,C=p.r*p.r*p.r*.2,M=p.q*p.q*(p.q<0?-1020:1020),x=p.p?32+((1-p.p)*(1-p.p)*2e4|0):0,A=p.d,B=p.j/2,S=p.k*p.k*.01,j=p.a,D=e,R=1/e,T=1/t,z=1/r,E=5/(1+p.u*p.u*20)*(.01+_);E>.8&&(E=.8),E=1-E;for(var F,G,H,I,J,K,L=!1,N=0,O=0,P=0,Q=0,U=0,V=0,W=0,X=0,Y=0,Z=0,$=new Array(1024),ee=new Array(32),te=$.length;te--;)$[te]=0;for(te=ee.length;te--;)ee[te]=2*Math.random()-1;for(te=0;te<b;te++){if(L)return te;if(x&&++Y>=x&&(Y=0,this.reset()),f&&++h>=f&&(f=0,s*=c),(s*=n+=i)>a&&(s=a,y>0&&(L=!0)),G=s,B>0&&(Z+=S,G*=1+Math.sin(Z)*B),(G|=0)<8&&(G=8),j||((o+=u)<0?o=0:o>.5&&(o=.5)),++O>D)switch(O=0,++N){case 1:D=t;break;case 2:D=r}switch(N){case 0:P=O*R;break;case 1:P=1+2*(1-O*T)*A;break;case 2:P=1-O*z;break;case 3:P=0,L=!0}q&&((H=0|(M+=C))<0?H=-H:H>1023&&(H=1023)),g&&w&&((k*=w)<1e-5?k=1e-5:k>.1&&(k=.1)),K=0;for(var re=8;re--;){if(++W>=G&&(W%=G,3==j))for(var se=ee.length;se--;)ee[se]=2*Math.random()-1;switch(j){case 0:J=W/G<o?.5:-.5;break;case 1:J=1-W/G*2;break;case 2:J=.225*(((J=1.27323954*(I=6.28318531*((I=W/G)>.5?I-1:I))+.405284735*I*I*(I<0?1:-1))<0?-1:1)*J*J-J)+J;break;case 3:J=ee[Math.abs(32*W/G|0)]}g&&(F=V,(_*=l)<0?_=0:_>.1&&(_=.1),m?(U+=(J-V)*_,U*=E):(V=J,U=0),Q+=(V+=U)-F,J=Q*=1-k),q&&($[X%1024]=J,J+=$[(X-H+1024)%1024],X++),K+=J}K*=.125*P*d,v[te]=K>=1?1:K<=-1?-1:K}return b}}var ac,synth=new ss;sound=function(e){if(gameStarted){var t=function(e){ac=ac||new AudioContext,synth._p._s(e);var t=synth.tr(),r=ac.createBuffer(1,t+1,ac.sampleRate);return synth._s(r.getChannelData(0),t),r}(e),r=ac.createBufferSource();r.buffer=t,r.connect(ac.destination),r.start(ac.currentTime)}};
 
 
 /**
@@ -125,15 +19,32 @@ function random(s) {
 }
 
 var ctx, img, mountain = new Image();
+var gameStarted = 0;
+var clouds = [], player;
 
+var blink = [];
+var images = [];
+
+go = 1;
+var explode = 0,gems = [],extraX,extraY,ds,frame=0;
+
+var cloud = new Image();
+cloud.src = "c.png";
 var mountain = document.createElement("canvas");
 mountain.width = 1008;
 mountain.height = 480;
+
+//
+// Init pseudo random for mountain and decorations
+//
 mr = new random(200);
-generate = function(s) {
+
+//
+// Generate a mountain
+//
+generateMountain = function(s) {
 	v = 480;
 	t = [(mr.n() * v)|0, (mr.n() * v)|0];
-
 	while(t.length < mountain.width) {
 		v *= 0.52;
 		t = function(o, v) {
@@ -158,56 +69,22 @@ generate = function(s) {
 		ctx.stroke();
 	}
 }
-generate();
-generate();
-generate();
+generateMountain();
+generateMountain();
+generateMountain();
 mr.n();
 
-var cloud = new Image(), clouds = [], player;
-cloud.src = "c.png";
-//var stats, xPanel;
-load = function(s) {
-	/*if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
-		m.style.display = "block";
-		m1.ontouchstart = function(e) {
-			e.preventDefault();
-			document.onkeydown({keyCode:37})
-		}
-		m1.ontouchend = function(e) {
-			e.preventDefault();
-			document.onkeyup({keyCode:37})
-		}
-		m2.ontouchstart = function(e) {
-			e.preventDefault();
-			document.onkeydown({keyCode:39})
-		}
-		m2.ontouchend = function(e) {
-			e.preventDefault();
-			document.onkeyup({keyCode:39})
-		}
-		m3.ontouchstart = function(e) {
-			e.preventDefault();
-			document.onkeydown({keyCode:38})
-		}
-		m3.ontouchend = function(e) {
-			e.preventDefault();
-			document.onkeyup({keyCode:38})
-		}
-	}*/
-	//stats = new Stats();
-	//xPanel = stats.addPanel( new Stats.Panel( 'x', '#ff8', '#221' ) );
-	
-	//stats.showPanel( 2 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-	//document.body.appendChild( stats.dom );
 
-	
-	//canvas = document.getElementById("canvas");
+//
+// Init game, canvas, player
+//
+load = function(s) {
 	c.width = 1008;
 	c.height = 480;
 	ctx = c.getContext("2d");
 	ctx.fillStyle = "#D0F4F7"; //Sky color
 
-	player = new P(40,200);
+	player = new PLAYER(40,200);
 	
 	img = new Image();
 	img.src = 't.png';
@@ -219,9 +96,13 @@ load = function(s) {
 	onresize();
 	gameLoop();
 }
-var gs = 0;
+
+
+
+//
+// Init level
+//
 var level="                                               B B BBB B B          A A A A A A          ABA A A ABA            A A A   A     BBBC   A AAA   A TBBBAAADC   MM   I  TUAAAAAAADBBBBBBBBBBBUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC         TAAAAAAAAAADC       TUAAAAAAAAAAADC     TUAAAAAAAAAAAAADC   TUAAAAAAAAAAAAAAADB BUAAAAAAAAA                   AA                   AA         O         AA         O         AA         O         AA         O         AA                   AA         J         AA  BBBBBBBBBBBBBBBBBAA                   AA                   AA B                 AAJA                 AAAA                 AAAA                 AA               A   AA               A  XAA      WWXWW    AAAAAA      BBBBB    AAAAAA             TBAAAAAA            TUAAAAAAA           TUAAAAAAAA          TUAAAAAAAAA         TUAAAAAAAAAA        TUAAAAAAAAAAABBBBBC             AAAAAAADC            AAAAAAAADC           AAAAAAAAADC          AAAAAAAAAADC         AAAAAAAAAAADC        AAAAAAAAAAAADC       AAAAAAAAAAAAADC      AAAAAAAAAAAAAADC     AAAAAAAAAAAAAAADB    AA              A    AA BB           A    AA A B               AA A A             JJAA A A          BBBBBAA AB                AA                   AA BBB               AA A A               AA AB  A N    N      AA A A AW           BAA A A A      N   N AAA     A           XAAA BBB A N    N     AAA A A AW           AAA ABA A      N   N AAA A A A           XAAA A A A N    N      AA     AW            AA A A A      N   N  AA A A A           XAAA ABA A N    N     AAA A A AW           AAA A A A          N AAA                 XAAA                   AA      W            AA      B            AA   BBBBBBBBBBBBBBBBAA                   AA                   AAJO                 AABO                 AA O                 AA O                 AA O                 AANJ                 AANB                 AAN                  AAN                  AAN                  AAJM                 AABM                 AA M                 AA M                 AALM                 AALJ                 AALB       TB        AAL       TUAMLMOLMNLAAL      TUAAONLNMNLOAAL     TUAAALONLOLMNAAJ    TUAAAANLMOLMLOAAB   TUAAAAAJJJJJJJJAA   TUAAAAAABBBBBBBBAA  TUAAAAAAA        AA BUAAAAAAAA        AA AAAAAAAAAA        AA                   AA                   AA                LMNAAJ               OMLAABBB             BBBAAAAA             AAAAA      L      L     AA      B      B     AA                   AA                   AA         LO        AA        WLOX       AA        ALOA       AA         LO        AA         LO        AA         LO        AA         LO        AA         LO        AA         JJ        AA         BB        AA       B    B      AA                   AA                   AA   B           B   AA                   AA                   AAB                 BAA                   AA                   AA   B           B   AA                   AA                   AABBBBBBB     BBBBBBBAA                   AA                   AA      BBBBBBB      AA                   AA                   AA                   AA                   AAW                 XAABBBBBBB     BBBBBBBAA      AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA  A A AW   XA      AA  A A AW   XA      AA  AA  AW   XA      AA  A A AW   XA      AA  A A AW   XA      AA      AW   XA      AA  AAA AW   XA      AA    A AW   XA      AA    A AW   XA      AA   AA AW   XA      AA    A AW   XA      AA  AAA AW   XA      AA      AW   XA      AA   A  AW   XA      AA  AA  AW   XA      AA   A  AW   XA      AA   A  AW   XA      AA  AAA AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA  AAA AW   XA      AA  A   AW   XA      AA  AAA AW   XA      AA    A AW   XA      AA  AAA AW   XA      AA      AW   XA      AA  AAA AW   XA      AA    A AW   XA      AA    A AW   XA      AA  A A AW   XA      AA   AA AW   XA      AA      AW   XA      AA      AW   XA      AA      AW   XA      AA      A     A      AA      M            AA      M  J         AA   OO AAAAAAA      AA OO  O             AAO     OO           AAO       O   OO     AAO       O     O    AAW        OO    O   AA          O    O   AA          X     O  AA          A      O AA                   AA                  XAA                   AA  N B O B L B M B  AA  N A O A L A M A  AA  N A O A L A M A  AA  N A O A L A M A  AA  N A   A   A   A  AA  J A J A J A J    AAO BBBBBBBBBBBBBBBBBAAO                  AAO                  AAO                  AA                   AAJO                 AAAN                 AA M                 AA O              L  AA N          XNN  L AA M          BBB  L AA J          AAA   LAABBB               LAAAAA               LAA  A                AA  A               JAA  ABBBBBB       O BAA                BBAAA                AAAAA            O      AA            B      AA            A      AA        O          AA        B          AA        A          AA    O              AA    B              AA    A              AA              BBBBBAAB     LLL     AAAAAAA      LLL          AA                   AABBBBBBBBBBBBBBB    AAAAAAAAAAAAAAAAA    AA             NLM   AA            O   O  AA           O       AA          O        AA      T          JBAA     TU          AAAA    TUA           AAA   TUAAW J  B    XAAA BBUAAABBBBBABBBBAAAA A  NN   NN        AA A N  N N  N       AA        N  N       AA                   AA       B    B      AAJ      A    A      AABBBBBBBA    ABB    AA                  XAA     LL     LL     AA     LL            AA            TBBBBB AA           TU      AAOBBBBBBBBBBU  OO   AAO                  AAO       OO         AAO                  AAO                  AA                   AAJ    N             AAB         O      JMAA     J           BMAA     B    J       MAA                  MAA                  MAA                   AA                  JAA                  BAA                   AALNNN     O        BAALBBB           O   AAL        J         AAL        B     J   AAL              B   AAL                  AAJMNMNMNMNMNMNMNMN  AABBBBBBBBBBBBBBBBBB AA                  OAA                  OAA                  OAA                  OAA                   AA                  JAANLMNOL          OTBAANBBBBB          BUAAAN        J         AAN        B         AAN                  AAN                  AAJ                  AABBBBB         M    AA      N       B  N AA     LB    O     B AA     L     B       AA     L        L    AA     L        B    AA     BCOOOOOOOOOOOOAA     ADBBBBBBBBBBBBAA       AAAAAAAAAAAAAAW      AAAAAAAAAAAAAA       A           AA       A           AA       A           AA       A           AA     X A           AA     AAA           AA       A           AA       A           AA       A           AAW      A OL        AA       A NM        AA       A OL        AA       A NM        AA       A OL        AA       A NM        AA     X AJOL        AA     AAAB   MMM    AA            BBB    AA                 OOAA                 BBAAW             MLM  AABBBBBC        ONO  AAAAAAADC     BBBBBBBAAAAAAAADC    AAAAAAAAAAAAAAAADC          AAAAAAAAAADC  O      AAAAAAAAAAADC  O     AAAAAAAAAAAADC       AAAAAAAAAAAAADBB     AA                   AA                   AA                   AA                  XAA                   AA              MM   AA              BBBBBAA              AAAAAAA          N        AA       JJJJ        AA       BBBB        AA     N             AA  JJJJ             AA  BBBB             AA                   AAJ L                AAB L                AA   L               AA   L               AA   L               AA     M             AA   J M             AA   B M             AA      M            AA      M            AA      M            AA        N          AA      J  N         AA      B  N         AA          N        AA          N        AA          N        AA            O      AA          J  O     AA          B  O     AA              O    AA              O    AA              O    AA                L  AA              J  L AA              B  L AA                  LAA                  LAA                  LAA                   AA                  JAA    M             BAAOOOOB          OOOAAAOOOOA         BBBBAAAOOOOAJ         AAAAAAOOOOAB       L     AA    AA        L    AAJJJJAA MNJ     L   AABBBBAABBBB      L  AAAAAAAAAAAA       L AA                   AA                  XAA            NONO   AA        MM  BBBB   AA     L  BB         AA     B             AA                   AA     LLLL          AAN   TBBBBC    NN   AAN  TUAAAADCML NN   AAN BUAAAAAADBBBBBBBBAAN AAAAAAAAAAAAAAAAAAAN                  AAN                  AA                   AAJ LLL          OOO AABBBBB   MMMM   BBBNA         BBBB      NA                   NAA                  NAA        OOOO      NAA      TBBBBBC      AA  OOOTUAAAAADC OO JAABBBBBUAAAAAAADBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-//level = level.replaceAll("Z","    ").split("");
 level = level.split("");
 for (var t in level) {
 	level[t] = {type:level[t]!=" " ? level[t].charCodeAt(0)-64 : null};
@@ -229,6 +110,11 @@ for (var t in level) {
 		level[t-21].type=[5,6,7,8,16,18][(mr.n()*6)|0];
 	}
 }
+
+
+//
+// Init auto move for start screen
+//
 var auto = {};
 auto[20] = 39;
 auto[80] = 39;
@@ -245,6 +131,9 @@ auto[955] = 38;
 auto[975] = 38;
 auto[990] = 39;
 
+//
+// init speech bubble for start screen
+//
 var speech = {};
 speech[0] = " ";
 speech[80] = "What's that?...";
@@ -255,15 +144,15 @@ speech[610] = "Oh no!!!";
 speech[700] = "I need to find all of them!";
 speech[850] = " ";
 
-go = 1;
-var explode = 0,gems = [],extraX,extraY,ds,frame=0; //975;
+
+//
+// Main loop
+//
 function gameLoop (t) {
-	//console.log(a);
-	//stats.begin();
 	extraX = 0;
 	extraY = 0;
 	
-	if (frame<1000) {
+	if (frame<1000) { //Introduction, show bubble, move player, explode, etc.
 		if (auto[frame]) {
 			keys[auto[frame]] = !keys[auto[frame]];
 		}
@@ -283,7 +172,7 @@ function gameLoop (t) {
 		}
 		if (frame==560) {
 			for (var i=0; i<100; i++) {
-				gems.push(new G(620, 240));
+				gems.push(new GEMS(620, 240));
 			}
 			level[160].type = null;
 			sound([3,,0.59,0.78,0.84,0.1765,,-0.37,,,,,,,,,0.3976,-0.2442,1,,,,,0.5]);
@@ -299,35 +188,41 @@ function gameLoop (t) {
 			player.y = 20050;
 		}
 		if (frame==990) {
-			player.js = 1;
+			player.jumpStop = 1;
 			allowKeys = 1;
 			floor.style.display = "block";
 			ti.style.display = "block";
 			sc.style.display = "block";
-			//ds = Date.now();
 			ds = t;
 		}
 	}
-	if (gs) {
+	if (gameStarted) {
 		frame++;
 	}
 	ctx.fillRect(0, 0, 1008, 480);
 	
-
+	//
+	// Move clouds
+	//
 	for (var i=0; i<clouds.length; i++) {
 		if (clouds[i].x<-200) { clouds[i].x = 1200; }
 		ctx.drawImage(cloud, clouds[i].x-=clouds[i].speed,clouds[i].y, 128*clouds[i].size, 71*clouds[i].size);
 	}
+	
+	//
+	// Draw mountains
+	//
 	ctx.drawImage(mountain,0,0,1008,592);
 
-	var x=0;
+	
+	
+	//
+	// Draw tiles which are visible on the screen
+	//
 	start = Math.max(0,Math.round(player.y/48)-6);
+	var x=0;
 	var y = -48+(48*start);
 	
-	
-	
-	
-	//var debugNbDraw = 0;
 	for (var i=start*21; i<(start+11)*21; i++) {
 		if (i%21==0) {
 			y+=48;
@@ -338,23 +233,22 @@ function gameLoop (t) {
 		level[i].y = y;
 		
 		if (level[i].type!=null) {
-			//debugNbDraw++;
-			var tN = level[i].type-1;
+			var tileNumber = level[i].type-1;
 			var dY = extraX;
 			var dX = extraY;
-			if ([11,12,13,14].indexOf(tN)!=-1) {
+			if ([11,12,13,14].indexOf(tileNumber)!=-1) {
 				dY = Math.sin(frame/24)*5;
 			}
 			var angle = 0;
 			
-			if (tN==8) {
+			if (tileNumber==8) {
 				dX = Math.random()*explode;
 				dY = -Math.random()*explode;
-			} else if (tN==22) {
-				tN = 10;
+			} else if (tileNumber==22) {
+				tileNumber = 10;
 				angle = Math.PI/4;
-			} else if (tN==23) {
-				tN = 10;
+			} else if (tileNumber==23) {
+				tileNumber = 10;
 				angle = -Math.PI/4;
 			}
 			
@@ -362,13 +256,13 @@ function gameLoop (t) {
 				ctx.save();
 				ctx.translate(x+24, y+dY+deltaY+24);
 				ctx.rotate(angle);
-				ctx.drawImage(img,tN*48,0,48,48, -24 , -24,48,48);
+				ctx.drawImage(img,tileNumber*48,0,48,48, -24 , -24,48,48);
 				ctx.restore();
 			} else {
-				ctx.drawImage(img,tN*48,0,48,48,x+dX , y+dY+deltaY,48,48);
+				ctx.drawImage(img,tileNumber*48,0,48,48,x+dX , y+dY+deltaY,48,48);
 			}
 			
-			if (tN==15) {
+			if (tileNumber==15) {
 				if (frame%(180)==0) {
 					blink[i] = ((Math.random()*20)|0)+10;
 				}
@@ -378,20 +272,23 @@ function gameLoop (t) {
 					ctx.drawImage(img,16*48,0,48,48,x,y+deltaY,48,48);
 				}
 			}
-			if (tN==10 && level[i].returnTo==0) {
+			if (tileNumber==10 && level[i].returnTo==0) {
 				level[i].type=10;
-			} else if (tN==10) {
+			} else if (tileNumber==10) {
 				level[i].returnTo--;
 			}
-//			ctx.fillText(i, x+dX , y+dY+deltaY+24); //debug
 		}
 		x+=48;
 	}
-	//gems.forEach(g => g.update());
+	
+	//
+	// Move the gemes exploded
+	//
 	for (var i=0; i<gems.length; i++) {
 		gems[i].update();
 	}
 	player.update();
+	
 	
 	if (go) {
 		window.requestAnimationFrame(gameLoop);
@@ -407,19 +304,19 @@ function gameLoop (t) {
 		ctx.fillText("move with arrow keys", 410, 20600 - player.y);
 		ctx.fillStyle = "#D0F4F7"; //Sky color
 	}
-	
-	//stats.end();
-	//xPanel.update( debugNbDraw, 460 );
 }
 
 
-G = function(x, y) {
+//
+// GEMS in explosion at start
+//
+GEMS = function(x, y) {
 	this.x = x;
 	this.y = y;
 	this.speed = 5 + Math.random()*15;
 	this.angle = Math.random()*Math.PI*2;
 	this.life = 300;
-	this.tN = [11,12,13,14][(Math.random()*4)|0];
+	this.tileNumber = [11,12,13,14][(Math.random()*4)|0];
 	this.vY = -10;
 	this.update = function() {
 		this.life--;
@@ -427,19 +324,19 @@ G = function(x, y) {
 			gems = [];
 		}
 		this.vY+=0.1;
-		ctx.drawImage(img,this.tN*48,0,48,48,this.x,this.y,48,48);
+		ctx.drawImage(img,this.tileNumber*48,0,48,48,this.x,this.y,48,48);
 		this.x+=Math.sin(this.angle)*this.speed;
 		this.y+=Math.cos(this.angle)*this.speed+this.vY;
 	}
 }
 
-
-var blink = [];
-var images = [];
-S = function(sf, lf, r) {
-	this.fi = sf;
-	this.sf = sf;
-	this.lf = lf;
+//
+// Show sprite image accordinalty the state
+//
+SPRITE = function(startFrame, lastFrame, r) {
+	this.frameIndex = startFrame;
+	this.startFrame = startFrame;
+	this.lastFrame = lastFrame;
 	this.wait = 0;
 	this.image = new Image();
 	var name = "p.png"+(r  ? "R" : "");
@@ -468,14 +365,13 @@ S = function(sf, lf, r) {
 		}
 	}
 	
-	
 	this.update = function() {
 		if (this.wait>0) {
 			this.wait--;
 		} else {
 			this.wait = 3;
-			if (++this.fi>=this.lf) {
-				this.fi = this.sf;
+			if (++this.frameIndex>=this.lastFrame) {
+				this.frameIndex = this.startFrame;
 			}
 		}
 		this.draw();
@@ -483,7 +379,7 @@ S = function(sf, lf, r) {
 	this.draw = function () {
 		ctx.drawImage(
 			images[this.name],
-			this.fi * 32,
+			this.frameIndex * 32,
 			0,
 			32,
 			32,
@@ -502,6 +398,8 @@ var score = 0;
 keys = [];
 deltaY = 0;
 allowKeys = 0;
+
+
 document.onkeydown = function(e) {
 	if (allowKeys) {
 		keys[e.keyCode] = 1;
@@ -511,17 +409,17 @@ document.onkeyup = function(e) {
 	if (allowKeys) {
 		keys[e.keyCode] = 0;
 		if (e.keyCode==38) {
-			player.js = 1;
+			player.jumpStop = 1;
 		}
 	}
-	if (!gs) {
+	if (!gameStarted) {
 		h.remove();
 		iA();
-		gs = 1;
+		gameStarted = 1;
 	}
 }
 
-g = function(x, y) {
+getTile = function(x, y) {
 	var i = (x/48+(((y/48)|0)*21))|0;
 	if (!level[i]) {
 		return null;
@@ -535,28 +433,28 @@ g = function(x, y) {
 	return level[i].type!=null && [4,5,6,7,8,16,18].indexOf(level[i].type)==-1 ? level[i] : null;
 }
 
-P = function(x, y) {
+PLAYER = function(x, y) {
 	this.state = "idle";
 	this.x=x;
 	this.y = y;
-	this.d = 1;
-	this.s = {};
-	this.v = {x:0, y:1};
-	this.js = 1;
+	this.direction = 1;
+	this.sprites = {};
+	this.velocity = {x:0, y:1};
+	this.jumpStop = 1;
 	
-	this.s.idle = new S(6, 11);
-	this.s.idleL = new S(6, 11, 1);
+	this.sprites.idle = new SPRITE(6, 11);
+	this.sprites.idleL = new SPRITE(6, 11, 1);
 	
-	this.s.walk = new S(1, 5);
-	this.s.walkL = new S(1, 5, 1);
+	this.sprites.walk = new SPRITE(1, 5);
+	this.sprites.walkL = new SPRITE(1, 5, 1);
 	
-	this.s.jump = new S(12, 14);
-	this.s.jumpL = new S(12, 14, 1);
+	this.sprites.jump = new SPRITE(12, 14);
+	this.sprites.jumpL = new SPRITE(12, 14, 1);
 	
-	this.s.fall = new S(15, 17);
-	this.s.fallL = new S(15, 17, 1);
+	this.sprites.fall = new SPRITE(15, 17);
+	this.sprites.fallL = new SPRITE(15, 17, 1);
 	
-	this.sprite = this.s[this.state];
+	this.sprite = this.sprites[this.state];
 	this.update = function() {
 		var oldState = this.state;
 		floor2.innerHTML = 424 - (this.y/48)|0;
@@ -569,78 +467,64 @@ P = function(x, y) {
 		}
 		
 		if (this.state!="jump" && this.state!="fall") {
-			this.v.x = 0;
+			this.velocity.x = 0;
 			if (keys[39]) {
-				this.v.x = 6; //DEBUG 6
-				this.d = 1;
+				this.velocity.x = 6;
+				this.direction = 1;
 			} else if (keys[37]) {
-				this.v.x = -6;  //DEBUG 6
-				this.d = 0;
+				this.velocity.x = -6;
+				this.direction = 0;
 			}
 			
 			if (keys[38]) {
-				if (this.js) {
-					this.v.y = -18;
+				if (this.jumpStop) {
+					this.velocity.y = -18;
 					sound([0,,0.1945,,0.2019,0.3725,,0.2486,,,,,,0.3973,,,,,1,,,0.0979,,0.5]);
-					this.js = 0;
+					this.jumpStop = 0;
 				}
 			}
 		} else {
 			if (keys[39]) {
-				this.d = 1;
-				if (this.v.x<0) {
-					this.v.x*=0.90; //-10  -3
+				this.direction = 1;
+				if (this.velocity.x<0) {
+					this.velocity.x*=0.90;
 				}
-				if (this.v.x>6.2) {
-					this.v.x*=0.95; //+10
+				if (this.velocity.x>6.2) {
+					this.velocity.x*=0.95;
 				}
-				if (this.v.x<6.2) {
-					this.v.x+=0.5; //-10  -3  +3
+				if (this.velocity.x<6.2) {
+					this.velocity.x+=0.5;
 				}
 			} else if (keys[37]) {
-				this.d = 0;
-				if (this.v.x>0) {
-					this.v.x*=0.90; //+3 +10 
+				this.direction = 0;
+				if (this.velocity.x>0) {
+					this.velocity.x*=0.90;
 				}
-				if (this.v.x<-6.2) {
-					this.v.x*=0.95; //-10
+				if (this.velocity.x<-6.2) {
+					this.velocity.x*=0.95;
 				}
-				if (this.v.x>-6.2) {
-					this.v.x-=0.5; // -3 +3 10
+				if (this.velocity.x>-6.2) {
+					this.velocity.x-=0.5;
 				}
 			} else {
-				this.v.x*=0.90;
+				this.velocity.x*=0.90;
 			}
 		}
-		this.v.y+=1.01;
-		if (this.v.y>47) {
-			this.v.y = 47;
+		this.velocity.y+=1.01;
+		if (this.velocity.y>47) {
+			this.velocity.y = 47;
 		}
 		var onSlope = 0;
-		if (this.v.y>0) {
+		if (this.velocity.y>0) {
 			y = 48;
-			
-			//debugCollid = 0;
-			
-			//Si je vais vers la droite, il faut faire 36->24->12
-			//Si je vais vers la gauche, il faut faire 12->24->36
-			/*xStart = player.direction==1 ? 36 : 12;
-			xStep = player.direction==1 ? -12 : 12;
-			xEnd = xStart + 2*xStep;*/
-			
-			//for (var x=12; x<=36; x+=12) {
-			//for (var x=xStart; x!=xEnd; x+=xStep) {
 			for (x of [24,12,36]) {
-			//for (x of [12,24,36]) {
-			
-				//console.log("Je vérifie la collision en ",this.x + x + this.v.x, this.y + this.v.y + y);
-				if (c = g(this.x + x + this.v.x, this.y + this.v.y + y)) {
-					this.v.y = 0;
+				if (c = getTilethis.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
+					this.velocity.y = 0;
 					this.y = c.y - 48;
 					switch (c.type) {
 						case 10:
 						case 11:
-							this.v.y = -24;
+							this.velocity.y = -24;
 							this.state = "jump";
 							c.type=11;
 							c.returnTo = 5;
@@ -648,123 +532,108 @@ P = function(x, y) {
 							break;
 						case 23:
 						case 24:
-							this.v.y = -25;
-							this.v.x = c.type==23 ? 24 : -24;
+							this.velocity.y = -25;
+							this.velocity.x = c.type==23 ? 24 : -24;
 							this.state = "jump";
 							player.x = c.x;
 							sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
 							//break;
 						case 3: //Pente qui monte vers la gauche
-							this.y+=Math.min(48, this.x +24 + this.v.x - c.x);
+							this.y+=Math.min(48, this.x +24 + this.velocity.x - c.x);
 							onSlope = 1;
 							break;
 						
 						case 20: //Pente qui monte vers la droite
-							//var debugAvant = this.y;
-							//Pour corriger le bug, il faudraut limiter le delta à 0 au minimum si en fasse du joueur, ce n'est plus une rampe
-							this.y+=Math.min(48,48-(this.x + 24 + this.v.x - c.x));
-						//	console.log("Collision, je suis en Y=",debugAvant+48, "Je rajoute", Math.min(48,47-(this.x + 24 + this.v.x - c.x)), "Je passe donc en ",this.y+48);
+							this.y+=Math.min(48,48-(this.x + 24 + this.velocity.x - c.x));
 							onSlope = 1;
 							break;
 					}
-					//debugCollid = 1;
-					//console.log(c);
-					//ctx.strokeRect(c.x, c.y-this.y+256, 48,48);
 					break;
 				}
 			}
-			//if (!debugCollid) {
-			//	console.log('Pas de c');
-			//}
 		}
 		if (!onSlope) { 
-			if (this.v.y<0) {
+			if (this.velocity.y<0) {
 				y = 0;
 				for (var x=12; x<=36; x+=12) {
-					if (c = g(this.x + x + this.v.x, this.y + this.v.y + y)) {
-						this.v.y = 0;
+					if (c = getTilethis.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
+						this.velocity.y = 0;
 						this.y = c.y + 48;
-						//console.log("ici");
 						break;
 					}
 				}
 			}
-			if (this.v.x>0) {
+			if (this.velocity.x>0) {
 				x = 48;
 				a:
 				for (var y=0; y<=47; y+=12) {
-					if (c = g(this.x + x + this.v.x, this.y + this.v.y + y)) {
+					if (c = getTilethis.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
 						switch (c.type) {
 							case 3:
 								continue;
 							case 23:
 							case 24:
-								this.v.y = -25;
-								this.v.x = c.type==23 ? 24 : -24;
+								this.velocity.y = -25;
+								this.velocity.x = c.type==23 ? 24 : -24;
 								this.state = "jump";
 								player.x = c.x;
 								sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
 								break a;
 							case 20:
-								this.y+=Math.min(0, -(this.x+24+this.v.x - c.x));
+								this.y+=Math.min(0, -(this.x+24+this.velocity.x - c.x));
 								break a;
 						}
-						this.v.x = 0;
+						this.velocity.x = 0;
 						this.x = c.x - 48;
 						break;
 					}
 				}
 			}
-			if (this.v.x<0) {
+			if (this.velocity.x<0) {
 				x = 0;
 				a:
 				for (var y=0; y<=47; y+=12) {
-					if (c = g(this.x + x + this.v.x, this.y + this.v.y + y)) {
+					if (c = getTilethis.x + x + this.velocity.x, this.y + this.velocity.y + y)) {
 						switch (c.type) {
 							case 20:
 								continue;
 							case 23:
 							case 24:
-								this.v.y = -25;
-								this.v.x = c.type==23 ? 24 : -24;
+								this.velocity.y = -25;
+								this.velocity.x = c.type==23 ? 24 : -24;
 								this.state = "jump";
 								player.x = c.x;
 								sound([0,,0.16,0.33,0.59,0.35,,0.02,-0.02,0.69,0.3,,,0.31,,0.36,,,1,,,0.0715,,0.5]);
 								break a;
 							case 3:
-								this.y+=Math.min(48, Math.min(48,this.x+24+this.v.x - c.x)-48);
+								this.y+=Math.min(48, Math.min(48,this.x+24+this.velocity.x - c.x)-48);
 								break a;
 						}
-						this.v.x = 0;
+						this.velocity.x = 0;
 						this.x = c.x + 48;
 						break;
 					}
 				}
 			}
-			//console.log("Pas on slope", this.v.y);
 		}
 		
 		this.state = "idle";
-		if (this.v.x!=0) {
+		if (this.velocity.x!=0) {
 			this.state = "walk";
 		}
-		if (this.v.y>0) {
+		if (this.velocity.y>0) {
 			this.state = "fall";
-		} else if (this.v.y<0) {
+		} else if (this.velocity.y<0) {
 			this.state = "jump";
 		}
 		
 		if ((oldState=="fall" || oldState=="jump") && (this.state=="walk" || this.state=="idle")) {
-			//console.log(oldState, this.state);
 			sound([3,,0.0137,,0.1662,0.31,,-0.5727,,,,,,,,,,,1,,,,,0.5]);
-		} else {
-			//console.log(oldState, this.state);
 		}
-		//console.log(this.v.y);
 		
-		this.y+=this.v.y;
-		this.x+=this.v.x;
-		this.sprite = this.s[this.state+(!this.d ? "L" : "")];
+		this.y+=this.velocity.y;
+		this.x+=this.velocity.x;
+		this.sprite = this.sprites[this.state+(!this.direction ? "L" : "")];
 		this.sprite.x = this.x + extraX;
 		this.sprite.y = this.y + extraY; // + penteY;
 		this.sprite.update();
@@ -781,7 +650,7 @@ P = function(x, y) {
 // use it in a demo.
 
 // Song data
-  var song = {
+var song = {
       songData: [
         { // Instrument 0
           i: [
@@ -1217,7 +1086,7 @@ var CPlayer = function() {
     //--------------------------------------------------------------------------
 
     // Generate audio data for a single track
-    this.generate = function () {
+    this.gen = function () {
         // Local variables
         var i, j, b, p, row, col, n, cp,
             k, t, lfor, e, x, rsample, rowStartSample, f, da;
@@ -1352,8 +1221,8 @@ var CPlayer = function() {
         return ++mCurrentCol == 7;
     };
 
-    // Create a WAVE formatted Uint8Array from the generated audio data
-    this.createWave = function() {
+    // Create a WAVE formatted Uint8Array from the gend audio data
+    this.create = function() {
 	   
         // Create WAVE header
         var wave = new Uint8Array(8468012);
@@ -1407,13 +1276,13 @@ iA = function() {
 }
 
 //
-// Génération de la musique
+// Generate music at start de la musique
 //
 var m = new CPlayer();
-while (!m.generate()) { }
-var wave = m.createWave();
-
+while (!m.gen()) { }
+var wave = m.create();
 var scale=1;
+
 onresize = function() {
         r = (1008/480);
 	if (innerWidth / innerHeight <= r) {
